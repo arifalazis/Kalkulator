@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator </title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+
+        .calculator {
+            background-color: #333;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+
+        #display {
+            width: 100%;
+            height: 60px;
+            margin-bottom: 10px;
+            font-size: 24px;
+            text-align: right;
+            padding: 5px;
+            background-color: #fff;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 5px;
+        }
+
+        button {
+            padding: 15px;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #666;
+            color: white;
+        }
+
+        button:hover {
+            background-color: #999;
+        }
+
+        .operator {
+            background-color: #ff9500;
+        }
+
+        .function {
+            background-color: #4a4a4a;
+        }
+
+        .equals {
+            background-color: #ff9500;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <input type="text" id="display" disabled>
+        <div class="buttons">
+            <!-- Scientific Functions -->
+            <button class="function" onclick="addFunction('sin(')">sin</button>
+            <button class="function" onclick="addFunction('cos(')">cos</button>
+            <button class="function" onclick="addFunction('tan(')">tan</button>
+            <button class="function" onclick="addFunction('log(')">log</button>
+            <button class="function" onclick="addFunction('ln(')">ln</button>
+            <button class="function" onclick="addFunction('√(')">√</button>
+            
+            <!-- Standard Calculator Buttons -->
+            <button onclick="clearDisplay()">C</button>
+            <button onclick="backspace()">⌫</button>
+            <button onclick="addOperator('%')">%</button>
+            <button onclick="addOperator('(')">(</button>
+            <button onclick="addOperator(')')">)</button>
+            <button onclick="addOperator('^')">^</button>
+            
+            <button onclick="addNumber(7)">7</button>
+            <button onclick="addNumber(8)">8</button>
+            <button onclick="addNumber(9)">9</button>
+            <button class="operator" onclick="addOperator('/')">/</button>
+            <button class="function" onclick="addConstant('π')">π</button>
+            <button class="function" onclick="addConstant('e')">e</button>
+            
+            <button onclick="addNumber(4)">4</button>
+            <button onclick="addNumber(5)">5</button>
+            <button onclick="addNumber(6)">6</button>
+            <button class="operator" onclick="addOperator('*')">×</button>
+            <button class="function" onclick="addFunction('Math.abs(')">|x|</button>
+            <button class="function" onclick="addFunction('Math.pow(10,')">10^x</button>
+            
+            <button onclick="addNumber(1)">1</button>
+            <button onclick="addNumber(2)">2</button>
+            <button onclick="addNumber(3)">3</button>
+            <button class="operator" onclick="addOperator('-')">-</button>
+            <button class="function" onclick="addFunction('Math.sqrt(')">√x</button>
+            <button class="function" onclick="addFunction('Math.exp(')">e^x</button>
+            
+            <button onclick="addNumber(0)">0</button>
+            <button onclick="addOperator('.')">.</button>
+            <button class="equals" onclick="calculate()" style="grid-column: span 2">=</button>
+            <button class="operator" onclick="addOperator('+')">+</button>
+            <button class="function" onclick="addFunction('Math.log10(')">log10</button>
+        </div>
+    </div>
+
+    <script>
+        let display = document.getElementById('display');
+        
+        function addNumber(num) {
+            display.value += num;
+        }
+        
+        function addOperator(op) {
+            display.value += op;
+        }
+        
+        function addFunction(func) {
+            display.value += func;
+        }
+        
+        function addConstant(constant) {
+            if(constant === 'π') display.value += Math.PI;
+            if(constant === 'e') display.value += Math.E;
+        }
+        
+        function clearDisplay() {
+            display.value = '';
+        }
+        
+        function backspace() {
+            display.value = display.value.slice(0, -1);
+        }
+        
+        function calculate() {
+            try {
+                let expr = display.value;
+                // Replace scientific functions
+                expr = expr.replace(/√/g, 'Math.sqrt');
+                expr = expr.replace(/\^/g, '**');
+                expr = expr.replace(/ln/g, 'Math.log');
+                expr = expr.replace(/log/g, 'Math.log10');
+                expr = expr.replace(/sin/g, 'Math.sin');
+                expr = expr.replace(/cos/g, 'Math.cos');
+                expr = expr.replace(/tan/g, 'Math.tan');
+                
+                const result = eval(expr);
+                display.value = result;
+            } catch (error) {
+                display.value = 'Error';
+            }
+        }
+    </script>
+</body>
+</html>
